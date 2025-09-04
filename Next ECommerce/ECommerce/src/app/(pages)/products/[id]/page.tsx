@@ -10,6 +10,7 @@ import { ShoppingCart, Heart, Truck, Shield, RotateCcw } from 'lucide-react';
 import Link from 'next/link';
 import { renderStars } from '@/helpers/rating';
 import { ProductsResponse, SingleProductResponse } from '@/types';
+import { apiServices } from '@/services/api';
 
 export default function ProductDetailPage() {
   const { id } = useParams();
@@ -24,10 +25,10 @@ export default function ProductDetailPage() {
   async function getSingleProduct() {
     try {
       setLoading(true);
-      const res = await fetch(
-        `https://ecommerce.routemisr.com/api/v1/products/${id}`
+
+      const data: SingleProductResponse = await apiServices.getSingleProduct(
+        id ?? '' // to ignore undefined
       );
-      const data: SingleProductResponse = await res.json();
       // console.log(data.data);
       setProduct(data.data);
     } catch (error: any) {

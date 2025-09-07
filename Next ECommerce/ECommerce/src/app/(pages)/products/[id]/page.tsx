@@ -6,11 +6,21 @@ import { useParams } from 'next/navigation';
 import { Product } from '@/interfaces';
 import { Button } from '@/components/ui/button';
 import { LoadingSpinner } from '@/components/shared/LoadingSpinner';
-import { ShoppingCart, Heart, Truck, Shield, RotateCcw } from 'lucide-react';
+import {
+  ShoppingCart,
+  Heart,
+  Truck,
+  Shield,
+  RotateCcw,
+  Loader,
+  Loader2,
+} from 'lucide-react';
 import Link from 'next/link';
 import { renderStars } from '@/helpers/rating';
 import { ProductsResponse, SingleProductResponse } from '@/types';
 import { apiServices } from '@/services/api';
+import toast from 'react-hot-toast';
+import AddToCart from '@/components/products/AddToCart';
 
 export default function ProductDetailPage() {
   const { id } = useParams();
@@ -21,6 +31,8 @@ export default function ProductDetailPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [selectedImage, setSelectedImage] = useState(-1);
+
+  const [addToCartLoading, setAddToCartLoading] = useState(false);
 
   async function getSingleProduct() {
     try {
@@ -39,6 +51,12 @@ export default function ProductDetailPage() {
     }
   }
 
+  async function handleAddToCart() {
+    setAddToCartLoading(true);
+    const data = await apiServices.addProductToCart(product!._id);
+    toast.success(data.message);
+    setAddToCartLoading(false);
+  }
   useEffect(() => {
     getSingleProduct();
   }, [id]);
@@ -188,14 +206,21 @@ export default function ProductDetailPage() {
 
           {/* Action Buttons */}
           <div className="flex gap-4">
-            <Button
+            {/* <Button
+              onClick={handleAddToCart}
               size="lg"
               className="flex-1"
-              disabled={product.quantity === 0}
+              disabled={product.quantity === 0 || addToCartLoading}
             >
+              {addToCartLoading && <Loader2 className="animate-spin" />}
               <ShoppingCart className="h-5 w-5 mr-2" />
               Add to Cart
-            </Button>
+            </Button> */}
+            <AddToCart
+              addToCartLoading={addToCartLoading}
+              productQuantity={product.quantity}
+              handleAddToCart={handleAddToCart}
+            />
             <Button variant="outline" size="lg">
               <Heart className="h-5 w-5" />
             </Button>

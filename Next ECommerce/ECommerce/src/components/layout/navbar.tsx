@@ -81,13 +81,15 @@ export function Navbar() {
             </Button>
 
             {/* Shopping Cart */}
-            <Button variant="ghost" size="icon" className="relative">
-              <ShoppingCart className="h-5 w-5" />
-              <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-xs text-primary-foreground flex items-center justify-center">
-                0
-              </span>
-              <span className="sr-only">Shopping cart</span>
-            </Button>
+            <Link href={'/cart'}>
+              <Button variant="ghost" size="icon" className="relative">
+                <ShoppingCart className="h-5 w-5" />
+                <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-xs text-primary-foreground flex items-center justify-center">
+                  0
+                </span>
+                <span className="sr-only">Shopping cart</span>
+              </Button>
+            </Link>
 
             {/* Mobile Menu */}
             <Button

@@ -12,16 +12,17 @@ import toast from 'react-hot-toast';
 
 interface CartProductProps {
   item: CartProductI<InnerProduct>;
+  handleRemoveCartProduct: (
+    productId: string,
+    setIsRemovingProduct: (value: boolean) => void
+  ) => void;
 }
-export default function CartProduct({ item }: CartProductProps) {
+export default function CartProduct({
+  item,
+  handleRemoveCartProduct,
+}: CartProductProps) {
   const [isRemovingProduct, setIsRemovingProduct] = useState(false);
-  async function handleRemoveCartProduct() {
-    setIsRemovingProduct(true);
-    const response = await apiServices.removeSpecificItem(item.product._id);
-    console.log(response);
-    toast.success('Product removed from cart', { position: 'bottom-right' });
-    setIsRemovingProduct(false);
-  }
+
   return (
     <div key={item._id} className="flex gap-4 p-4 border rounded-lg">
       <div className="relative w-20 h-20 flex-shrink-0">
@@ -52,7 +53,13 @@ export default function CartProduct({ item }: CartProductProps) {
       </div>
 
       <div className="flex flex-col items-end gap-2">
-        <Button onClick={handleRemoveCartProduct} variant="ghost" size="sm">
+        <Button
+          onClick={() => {
+            handleRemoveCartProduct(item.product._id, setIsRemovingProduct);
+          }}
+          variant="ghost"
+          size="sm"
+        >
           {isRemovingProduct ? (
             <Loader2 className="animate-spin" />
           ) : (

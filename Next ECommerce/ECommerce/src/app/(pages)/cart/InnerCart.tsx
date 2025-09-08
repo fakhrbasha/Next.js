@@ -5,7 +5,7 @@ import { formatPrice } from '@/helpers/currency';
 import { GetUserCartResponse } from '@/interfaces';
 import { apiServices } from '@/services/api';
 import { Separator } from '@radix-ui/react-separator';
-import { Trash2 } from 'lucide-react';
+import { Loader2, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
@@ -16,6 +16,7 @@ interface cartDataProp {
 export default function InnerCart({ cartData }: cartDataProp) {
   const [innerCartData, setInnerCartData] =
     useState<GetUserCartResponse>(cartData);
+  const [isCartClear, setIsCartClear] = useState(false);
 
   async function handleRemoveCartProduct(
     productId: string,
@@ -31,6 +32,29 @@ export default function InnerCart({ cartData }: cartDataProp) {
     toast.success('Product removed from cart', { position: 'bottom-right' });
     setIsRemovingProduct(false);
   }
+
+  async function handleClearCart() {
+    setIsCartClear(true);
+    const response = await apiServices.ClearCart();
+
+    const newProductCart = await apiServices.getUserCart();
+    setInnerCartData(newProductCart);
+    setIsCartClear(false);
+    toast.success('Cart cleared', { position: 'bottom-right' });
+  }
+  if (!innerCartData || innerCartData.numOfCartItems === 0) {
+    return (
+      <div className="container mx-auto px-4 py-8 text-center">
+        <h2 className="text-xl font-semibold text-gray-700 mb-4">
+          No product in your cart
+        </h2>
+        <Button variant="outline" className="w-fit mt-2" asChild>
+          <Link href="/products">Browse products</Link>
+        </Button>
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="mb-8">
@@ -58,8 +82,16 @@ export default function InnerCart({ cartData }: cartDataProp) {
 
           {/* Clear Cart */}
           <div className="mt-6">
-            <Button variant="outline">
-              <Trash2 className="h-4 w-4 mr-2" />
+            <Button
+              disabled={isCartClear}
+              variant="outline"
+              onClick={handleClearCart}
+            >
+              {isCartClear ? (
+                <Loader2 className="animate-spin" />
+              ) : (
+                <Trash2 className="h-4 w-4 mr-2" />
+              )}
               Clear Cart
             </Button>
           </div>

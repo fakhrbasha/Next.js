@@ -47,6 +47,12 @@ class ApiServices {
             headers: this.#getHeader(),
         }).then((res) => res.json());
     }
+    async ClearCart(): Promise<any> {
+        return await fetch(this.#baseURL + `/api/v1/cart`, {
+            method: 'DELETE',
+            headers: this.#getHeader(),
+        }).then((res) => res.json());
+    }
 }
 // first take instance of the class
 

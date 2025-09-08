@@ -16,13 +16,30 @@ interface CartProductProps {
     productId: string,
     setIsRemovingProduct: (value: boolean) => void
   ) => void;
+  handleUpdateProductCartCount: (
+    productId: string,
+    count: number
+  ) => Promise<void>;
 }
 export default function CartProduct({
   item,
   handleRemoveCartProduct,
+  handleUpdateProductCartCount,
 }: CartProductProps) {
   const [isRemovingProduct, setIsRemovingProduct] = useState(false);
+  const [isUpdatingInc, setIsUpdatingInc] = useState(false);
+  const [isUpdatingDec, setIsUpdatingDec] = useState(false);
 
+  async function handleInc(count: number) {
+    setIsUpdatingInc(true);
+    await handleUpdateProductCartCount(item.product._id, count);
+    setIsUpdatingInc(false);
+  }
+  async function handleDec(count: number) {
+    setIsUpdatingDec(true);
+    await handleUpdateProductCartCount(item.product._id, count);
+    setIsUpdatingDec(false);
+  }
   return (
     <div key={item._id} className="flex gap-4 p-4 border rounded-lg">
       <div className="relative w-20 h-20 flex-shrink-0">
@@ -68,14 +85,36 @@ export default function CartProduct({
         </Button>
 
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm">
-            <Minus className="h-4 w-4" />
+          <Button
+            disabled={item.count === 1}
+            onClick={() => {
+              handleDec(item.count - 1);
+            }}
+            variant="outline"
+            size="sm"
+          >
+            {isUpdatingDec ? (
+              <Loader2 className="animate-spin" />
+            ) : (
+              <Minus className="h-4 w-4" />
+            )}
           </Button>
 
           <span className="w-8 text-center">{item.count}</span>
 
-          <Button variant="outline" size="sm">
-            <Plus className="h-4 w-4" />
+          <Button
+            disabled={item.count === item.product.quantity}
+            onClick={() => {
+              handleInc(item.count + 1);
+            }}
+            variant="outline"
+            size="sm"
+          >
+            {isUpdatingInc ? (
+              <Loader2 className="animate-spin" />
+            ) : (
+              <Plus className="h-4 w-4" />
+            )}
           </Button>
         </div>
       </div>

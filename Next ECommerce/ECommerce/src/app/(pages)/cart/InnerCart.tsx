@@ -18,29 +18,39 @@ export default function InnerCart({ cartData }: cartDataProp) {
     useState<GetUserCartResponse>(cartData);
   const [isCartClear, setIsCartClear] = useState(false);
 
+  async function getNewCartItems() {
+    const newProductCart = await apiServices.getUserCart();
+    setInnerCartData(newProductCart);
+  }
   async function handleRemoveCartProduct(
     productId: string,
     setIsRemovingProduct: (value: boolean) => void
   ) {
     setIsRemovingProduct(true);
     const response = await apiServices.removeSpecificItem(productId);
-    console.log(response);
-
-    const newProductCart = await apiServices.getUserCart();
-    setInnerCartData(newProductCart);
-
+    getNewCartItems();
+    // console.log(response);
     toast.success('Product removed from cart', { position: 'bottom-right' });
     setIsRemovingProduct(false);
+  }
+  async function handleUpdateProductCartCount(
+    productId: string,
+    count: number
+  ) {
+    // setIsUpdating(true);
+    const response = await apiServices.UpdateCartCount(productId, count);
+    getNewCartItems();
+    // setIsUpdating(false);
+    // console.log(response);
   }
 
   async function handleClearCart() {
     setIsCartClear(true);
     const response = await apiServices.ClearCart();
+    getNewCartItems();
 
-    const newProductCart = await apiServices.getUserCart();
-    setInnerCartData(newProductCart);
-    setIsCartClear(false);
     toast.success('Cart cleared', { position: 'bottom-right' });
+    setIsCartClear(false);
   }
   if (!innerCartData || innerCartData.numOfCartItems === 0) {
     return (
@@ -73,6 +83,7 @@ export default function InnerCart({ cartData }: cartDataProp) {
           <div className="space-y-4">
             {innerCartData.data.products.map((item) => (
               <CartProduct
+                handleUpdateProductCartCount={handleUpdateProductCartCount}
                 key={item._id}
                 handleRemoveCartProduct={handleRemoveCartProduct}
                 item={item}

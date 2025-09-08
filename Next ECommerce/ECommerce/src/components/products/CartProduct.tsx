@@ -27,18 +27,27 @@ export default function CartProduct({
   handleUpdateProductCartCount,
 }: CartProductProps) {
   const [isRemovingProduct, setIsRemovingProduct] = useState(false);
-  const [isUpdatingInc, setIsUpdatingInc] = useState(false);
-  const [isUpdatingDec, setIsUpdatingDec] = useState(false);
+  // const [isUpdatingInc, setIsUpdatingInc] = useState(false);
+  // const [isUpdatingDec, setIsUpdatingDec] = useState(false);
+  const [ProductCount, setProductCount] = useState(item.count);
+  // async function handleInc(count: number) {
+  //   // setIsUpdatingInc(true);
+  //   setProductCount(ProductCount + 1);
+  //   await handleUpdateProductCartCount(item.product._id, count);
+  //   // setIsUpdatingInc(false);
+  // }
 
-  async function handleInc(count: number) {
-    setIsUpdatingInc(true);
-    await handleUpdateProductCartCount(item.product._id, count);
-    setIsUpdatingInc(false);
-  }
-  async function handleDec(count: number) {
-    setIsUpdatingDec(true);
-    await handleUpdateProductCartCount(item.product._id, count);
-    setIsUpdatingDec(false);
+  const [timeOutID, setTimeOutID] = useState<NodeJS.Timeout>();
+  async function handleUpdateCount(count: number) {
+    // setIsUpdatingDec(true);
+    setProductCount(count);
+    clearTimeout(timeOutID); // clear request after 5 seconds because if user add click before 5 seconds
+    // user click and click and click request send after 5 seconds
+    const id = setTimeout(() => {
+      handleUpdateProductCartCount(item.product._id, count);
+    }, 500);
+    setTimeOutID(id);
+    // setIsUpdatingDec(false);
   }
   return (
     <div key={item._id} className="flex gap-4 p-4 border rounded-lg">
@@ -88,33 +97,25 @@ export default function CartProduct({
           <Button
             disabled={item.count === 1}
             onClick={() => {
-              handleDec(item.count - 1);
+              handleUpdateCount(ProductCount - 1);
             }}
             variant="outline"
             size="sm"
           >
-            {isUpdatingDec ? (
-              <Loader2 className="animate-spin" />
-            ) : (
-              <Minus className="h-4 w-4" />
-            )}
+            <Minus className="h-4 w-4" />
           </Button>
 
-          <span className="w-8 text-center">{item.count}</span>
+          <span className="w-8 text-center">{ProductCount}</span>
 
           <Button
             disabled={item.count === item.product.quantity}
             onClick={() => {
-              handleInc(item.count + 1);
+              handleUpdateCount(ProductCount + 1);
             }}
             variant="outline"
             size="sm"
           >
-            {isUpdatingInc ? (
-              <Loader2 className="animate-spin" />
-            ) : (
-              <Plus className="h-4 w-4" />
-            )}
+            <Plus className="h-4 w-4" />
           </Button>
         </div>
       </div>

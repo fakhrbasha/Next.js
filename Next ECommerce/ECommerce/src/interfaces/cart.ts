@@ -2,7 +2,7 @@ import { Brand } from "./brand";
 import { Category, Subcategory } from "./category";
 
 // Product inside the cart
-interface CartProduct<T> {
+export interface CartProduct<T> {
   count: number;
   _id: string;
   product: T; // product id
@@ -32,10 +32,10 @@ export interface GetUserCartResponse {
   message: string;
   numOfCartItems: number;
   cartId: string;
-  data: CartData<Product>;
+  data: CartData<InnerProduct>;
 }
 
-export interface Product {
+export interface InnerProduct {
   subcategory: Subcategory[];
   _id: string;
   title: string;

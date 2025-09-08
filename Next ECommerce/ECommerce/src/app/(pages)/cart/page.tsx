@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Trash2, Plus, Minus } from 'lucide-react';
 import { formatPrice } from '@/helpers/currency';
+import CartProduct from '@/components/products/CartProduct';
 // import { formatPrice } from '@/lib/utils'; // adjust import path
 
 export default async function Page() {
@@ -47,52 +48,7 @@ export default async function Page() {
         <div className="lg:col-span-2">
           <div className="space-y-4">
             {innerCartData.data.products.map((item) => (
-              <div key={item._id} className="flex gap-4 p-4 border rounded-lg">
-                <div className="relative w-20 h-20 flex-shrink-0">
-                  <Image
-                    src={item.product.imageCover}
-                    alt={item.product.title}
-                    fill
-                    className="object-cover rounded-md"
-                    sizes="80px"
-                  />
-                </div>
-
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold line-clamp-2">
-                    <Link
-                      href={`/products/${item.product.id}`}
-                      className="hover:text-primary transition-colors"
-                    >
-                      {item.product.title}
-                    </Link>
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    {item.product.brand?.name}
-                  </p>
-                  <p className="font-semibold text-primary mt-2">
-                    {formatPrice(item.price)}
-                  </p>
-                </div>
-
-                <div className="flex flex-col items-end gap-2">
-                  <Button variant="ghost" size="sm">
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-
-                  <div className="flex items-center gap-2">
-                    <Button variant="outline" size="sm">
-                      <Minus className="h-4 w-4" />
-                    </Button>
-
-                    <span className="w-8 text-center">{item.count}</span>
-
-                    <Button variant="outline" size="sm">
-                      <Plus className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-              </div>
+              <CartProduct item={item} />
             ))}
           </div>
 

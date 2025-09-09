@@ -8,9 +8,10 @@ import { Star, ShoppingCart, Heart } from 'lucide-react';
 import { renderStars } from '@/helpers/rating';
 import { formatPrice } from '@/helpers/currency';
 import AddToCart from './AddToCart';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { apiServices } from '@/services/api';
 import toast from 'react-hot-toast';
+import { CartContext } from '@/contexts/CartContext';
 
 interface ProductCardProps {
   product: Product;
@@ -19,12 +20,16 @@ interface ProductCardProps {
 
 export function ProductCard({ product, viewMode = 'grid' }: ProductCardProps) {
   const [AddToCartLoading, setAddToCartLoading] = useState<boolean>(false);
-  async function handleAddToCart() {
-    setAddToCartLoading(true);
-    const data = await apiServices.addProductToCart(product!._id);
-    toast.success(data.message);
-    setAddToCartLoading(false);
-  }
+  const { handleAddToCart } = useContext(CartContext);
+
+  // async function handleAddToCart() {
+  //   setAddToCartLoading(true);
+  //   const data = await apiServices.addProductToCart(product!._id);
+  //   setCartCount!(data.numOfCartItems);
+  //   toast.success(data.message);
+  //   setAddToCartLoading(false);
+  // }
+
   if (viewMode === 'list') {
     return (
       <div className="flex gap-4 p-4 border rounded-lg hover:shadow-md transition-shadow">
@@ -193,7 +198,9 @@ export function ProductCard({ product, viewMode = 'grid' }: ProductCardProps) {
         <AddToCart
           addToCartLoading={AddToCartLoading}
           productQuantity={product.quantity}
-          handleAddToCart={handleAddToCart}
+          handleAddToCart={() => {
+            handleAddToCart!(product._id, setAddToCartLoading);
+          }}
         />
       </div>
     </div>

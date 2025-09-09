@@ -1,13 +1,14 @@
 'use client';
 import { Button } from '@/components';
 import CartProduct from '@/components/products/CartProduct';
+import { CartContext } from '@/contexts/CartContext';
 import { formatPrice } from '@/helpers/currency';
 import { GetUserCartResponse } from '@/interfaces';
 import { apiServices } from '@/services/api';
 import { Separator } from '@radix-ui/react-separator';
 import { Loader2, Trash2 } from 'lucide-react';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 interface cartDataProp {
   cartData: GetUserCartResponse;
@@ -17,6 +18,7 @@ export default function InnerCart({ cartData }: cartDataProp) {
   const [innerCartData, setInnerCartData] =
     useState<GetUserCartResponse>(cartData);
   const [isCartClear, setIsCartClear] = useState(false);
+  const { setCartCount } = useContext(CartContext);
 
   async function getNewCartItems() {
     const newProductCart = await apiServices.getUserCart();
@@ -52,6 +54,9 @@ export default function InnerCart({ cartData }: cartDataProp) {
     toast.success('Cart cleared', { position: 'bottom-right' });
     setIsCartClear(false);
   }
+  useEffect(() => {
+    setCartCount(innerCartData.numOfCartItems);
+  }, [innerCartData]);
   if (!innerCartData || innerCartData.numOfCartItems === 0) {
     return (
       <div className="container mx-auto px-4 py-8 text-center">

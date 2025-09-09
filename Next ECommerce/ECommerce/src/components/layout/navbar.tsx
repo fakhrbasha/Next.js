@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ShoppingCart, Search, User, Menu, X } from 'lucide-react';
+import { ShoppingCart, Search, User, Menu, X, Loader2 } from 'lucide-react';
 import { Button } from '@/components';
 import {
   NavigationMenu,
@@ -11,11 +11,13 @@ import {
   NavigationMenuList,
 } from '@/components';
 import { cn } from '@/lib/utils';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { CartContext } from '@/contexts/CartContext';
 
 export function Navbar() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { cartCount, cartLoading } = useContext(CartContext);
 
   const navItems = [
     { href: '/products', label: 'Products' },
@@ -31,10 +33,10 @@ export function Navbar() {
           <Link href="/" className="flex items-center space-x-2">
             <div className="h-8 w-8 bg-primary rounded-lg flex items-center justify-center">
               <span className="text-primary-foreground font-bold text-lg">
-                T
+                F
               </span>
             </div>
-            <span className="font-bold text-xl">TechMart</span>
+            <span className="font-bold text-xl">Fakhr</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -85,7 +87,11 @@ export function Navbar() {
               <Button variant="ghost" size="icon" className="relative">
                 <ShoppingCart className="h-5 w-5" />
                 <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-xs text-primary-foreground flex items-center justify-center">
-                  0
+                  {cartLoading ? (
+                    <Loader2 className="animate-spin" />
+                  ) : (
+                    cartCount
+                  )}
                 </span>
                 <span className="sr-only">Shopping cart</span>
               </Button>

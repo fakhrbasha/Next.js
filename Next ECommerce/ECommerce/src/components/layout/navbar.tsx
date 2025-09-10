@@ -13,11 +13,15 @@ import {
 import { cn } from '@/lib/utils';
 import React, { useContext, useState } from 'react';
 import { CartContext } from '@/contexts/CartContext';
+import { useSelector } from 'react-redux';
 
 export function Navbar() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { cartCount, cartLoading } = useContext(CartContext);
+
+  const { count } = useSelector((state: any) => state.counter);
+  console.log(count);
 
   const navItems = [
     { href: '/products', label: 'Products' },

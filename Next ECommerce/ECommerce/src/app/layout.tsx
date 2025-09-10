@@ -4,6 +4,9 @@ import './globals.css';
 import { Footer, Navbar } from '@/components';
 import { Toaster } from 'react-hot-toast';
 import CartContextProvider from '@/contexts/CartContext';
+import { Provider } from 'react-redux';
+import { store } from '@/redux/store';
+import ProviderContainer from '@/components/layout/ProviderContainer';
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],
@@ -29,12 +32,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <CartContextProvider>
+        <ProviderContainer>
           <Navbar />
           {children}
-        </CartContextProvider>
-        <Toaster />
-        <Footer />
+          <Toaster />
+          <Footer />
+        </ProviderContainer>
       </body>
     </html>
   );

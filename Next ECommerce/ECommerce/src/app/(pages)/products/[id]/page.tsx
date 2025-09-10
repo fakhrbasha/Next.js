@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import { Product } from '@/interfaces';
@@ -21,6 +21,7 @@ import { ProductsResponse, SingleProductResponse } from '@/types';
 import { apiServices } from '@/services/api';
 import toast from 'react-hot-toast';
 import AddToCart from '@/components/products/AddToCart';
+import { CartContext } from '@/contexts/CartContext';
 
 export default function ProductDetailPage() {
   const { id } = useParams();
@@ -50,13 +51,16 @@ export default function ProductDetailPage() {
       setLoading(false);
     }
   }
+  const { handleAddToCart } = useContext(CartContext);
 
-  async function handleAddToCart() {
-    setAddToCartLoading(true);
-    const data = await apiServices.addProductToCart(product!._id);
-    toast.success(data.message);
-    setAddToCartLoading(false);
-  }
+  // async function handleAddToCart() {
+  //   setAddToCartLoading(true);
+  //   const data = await apiServices.addProductToCart(product!._id);
+  //   setCartCount!(data.numOfCartItems);
+  //   toast.success(data.message);
+  //   setAddToCartLoading(false);
+  // }
+
   useEffect(() => {
     getSingleProduct();
   }, [id]);
@@ -219,7 +223,9 @@ export default function ProductDetailPage() {
             <AddToCart
               addToCartLoading={addToCartLoading}
               productQuantity={product.quantity}
-              handleAddToCart={handleAddToCart}
+              handleAddToCart={() => {
+                handleAddToCart!(product._id, setAddToCartLoading);
+              }}
             />
             <Button variant="outline" size="lg">
               <Heart className="h-5 w-5" />

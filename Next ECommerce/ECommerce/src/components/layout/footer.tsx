@@ -1,4 +1,5 @@
-import Link from "next/link";
+'use client';
+import Link from 'next/link';
 import {
   Facebook,
   Twitter,
@@ -7,61 +8,65 @@ import {
   Mail,
   Phone,
   MapPin,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
 
 const footerSections = [
   {
-    title: "Shop",
+    title: 'Shop',
     links: [
-      { title: "Electronics", href: "/electronics" },
-      { title: "Fashion", href: "/fashion" },
-      { title: "Home & Garden", href: "/home" },
-      { title: "Sports", href: "/sports" },
-      { title: "Deals", href: "/deals" },
+      { title: 'Electronics', href: '/electronics' },
+      { title: 'Fashion', href: '/fashion' },
+      { title: 'Home & Garden', href: '/home' },
+      { title: 'Sports', href: '/sports' },
+      { title: 'Deals', href: '/deals' },
     ],
   },
   {
-    title: "Customer Service",
+    title: 'Customer Service',
     links: [
-      { title: "Contact Us", href: "/contact" },
-      { title: "Help Center", href: "/help" },
-      { title: "Track Your Order", href: "/track" },
-      { title: "Returns & Exchanges", href: "/returns" },
-      { title: "Size Guide", href: "/size-guide" },
+      { title: 'Contact Us', href: '/contact' },
+      { title: 'Help Center', href: '/help' },
+      { title: 'Track Your Order', href: '/track' },
+      { title: 'Returns & Exchanges', href: '/returns' },
+      { title: 'Size Guide', href: '/size-guide' },
     ],
   },
   {
-    title: "About",
+    title: 'About',
     links: [
-      { title: "About TechMart", href: "/about" },
-      { title: "Careers", href: "/careers" },
-      { title: "Press", href: "/press" },
-      { title: "Investor Relations", href: "/investors" },
-      { title: "Sustainability", href: "/sustainability" },
+      { title: 'About TechMart', href: '/about' },
+      { title: 'Careers', href: '/careers' },
+      { title: 'Press', href: '/press' },
+      { title: 'Investor Relations', href: '/investors' },
+      { title: 'Sustainability', href: '/sustainability' },
     ],
   },
   {
-    title: "Policies",
+    title: 'Policies',
     links: [
-      { title: "Privacy Policy", href: "/privacy" },
-      { title: "Terms of Service", href: "/terms" },
-      { title: "Cookie Policy", href: "/cookies" },
-      { title: "Shipping Policy", href: "/shipping" },
-      { title: "Refund Policy", href: "/refunds" },
+      { title: 'Privacy Policy', href: '/privacy' },
+      { title: 'Terms of Service', href: '/terms' },
+      { title: 'Cookie Policy', href: '/cookies' },
+      { title: 'Shipping Policy', href: '/shipping' },
+      { title: 'Refund Policy', href: '/refunds' },
     ],
   },
 ];
 
 const socialLinks = [
-  { icon: Facebook, href: "https://facebook.com", label: "Facebook" },
-  { icon: Twitter, href: "https://twitter.com", label: "Twitter" },
-  { icon: Instagram, href: "https://instagram.com", label: "Instagram" },
-  { icon: Youtube, href: "https://youtube.com", label: "YouTube" },
+  { icon: Facebook, href: 'https://facebook.com', label: 'Facebook' },
+  { icon: Twitter, href: 'https://twitter.com', label: 'Twitter' },
+  { icon: Instagram, href: 'https://instagram.com', label: 'Instagram' },
+  { icon: Youtube, href: 'https://youtube.com', label: 'YouTube' },
 ];
 
 export function Footer() {
+  const { count } = useSelector((state: RootState) => state.counter);
+
   return (
     <footer className="bg-muted/30 border-t">
       <div className="container mx-auto px-4 py-12">
@@ -75,7 +80,7 @@ export function Footer() {
                   T
                 </span>
               </div>
-              <span className="font-bold text-xl">TechMart</span>
+              <span className="font-bold text-xl">TechMart {count}</span>
             </Link>
             <p className="text-muted-foreground mb-4 max-w-md">
               Your one-stop destination for the latest technology, fashion, and

@@ -64,6 +64,21 @@ class ApiServices {
             headers: this.#getHeader(),
         }).then((res) => res.json());
     }
+
+    async checkout(cartId: string) {
+        return await fetch(this.#baseURL + "/api/v1/orders/checkout-session/" + cartId + "?url=http://localhost:3000", {
+            body: JSON.stringify({
+                "shippingAddress": {
+                    "details": "details",
+                    "phone": "01010700999",
+                    "city": "Cairo"
+                }
+            }
+            ),
+            headers: this.#getHeader(),
+            method: 'post'
+        }).then(res => res.json())
+    }
 }
 // first take instance of the class
 

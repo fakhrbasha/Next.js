@@ -65,7 +65,7 @@ const socialLinks = [
 ];
 
 export function Footer() {
-  const { count } = useSelector((state: RootState) => state.counter);
+  // const { count } = useSelector((state: RootState) => state.counter);
 
   return (
     <footer className="bg-muted/30 border-t">
@@ -80,7 +80,7 @@ export function Footer() {
                   T
                 </span>
               </div>
-              <span className="font-bold text-xl">TechMart {count}</span>
+              <span className="font-bold text-xl">TechMart</span>
             </Link>
             <p className="text-muted-foreground mb-4 max-w-md">
               Your one-stop destination for the latest technology, fashion, and

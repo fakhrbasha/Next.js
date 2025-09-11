@@ -18,6 +18,7 @@ export default function InnerCart({ cartData }: cartDataProp) {
   const [innerCartData, setInnerCartData] =
     useState<GetUserCartResponse>(cartData);
   const [isCartClear, setIsCartClear] = useState(false);
+  const [isCheckOut, setIsCheckOut] = useState(false);
   const { setCartCount } = useContext(CartContext);
 
   async function getNewCartItems() {
@@ -54,8 +55,15 @@ export default function InnerCart({ cartData }: cartDataProp) {
     toast.success('Cart cleared', { position: 'bottom-right' });
     setIsCartClear(false);
   }
+
+  async function handleCheckOut() {
+    setIsCheckOut(true);
+    const response = await apiServices.checkout(cartData.cartId);
+    setIsCheckOut(false);
+    location.href = response.session.url;
+  }
   useEffect(() => {
-    setCartCount(innerCartData.numOfCartItems);
+    setCartCount!(innerCartData.numOfCartItems);
   }, [innerCartData]);
   if (!innerCartData || innerCartData.numOfCartItems === 0) {
     return (
@@ -136,7 +144,15 @@ export default function InnerCart({ cartData }: cartDataProp) {
               <span>{formatPrice(innerCartData.data.totalCartPrice)}</span>
             </div>
 
-            <Button className="w-full" size="lg">
+            <Button
+              disabled={isCheckOut}
+              onClick={() => {
+                handleCheckOut();
+              }}
+              className="w-full"
+              size="lg"
+            >
+              {isCheckOut && <Loader2 className="animate-spin" />}
               Proceed to Checkout
             </Button>
 

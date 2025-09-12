@@ -1,5 +1,5 @@
 import { AddToCartResponse, GetUserCartResponse } from "@/interfaces";
-import { ProductsResponse, SingleProductResponse } from "@/types";
+import { BrandsResponse, ProductsResponse, SingleProductResponse } from "@/types";
 class ApiServices {
     #baseURL = 'https://ecommerce.routemisr.com';
     async getAllProducts(): Promise<ProductsResponse> {
@@ -78,6 +78,10 @@ class ApiServices {
             headers: this.#getHeader(),
             method: 'post'
         }).then(res => res.json())
+    }
+
+    async getAllBrands():Promise<BrandsResponse>{
+        return await fetch(this.#baseURL + "/api/v1/brands").then(res =>res.json())
     }
 }
 // first take instance of the class

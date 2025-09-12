@@ -12,46 +12,12 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 export default function Home() {
-  // const { count } = useSelector((state: RootState) => state.counter);
-  // const { products } = useSelector((state: RootState) => state.product);
-  // const dispatch = useDispatch<AppDispatch>();
-
-  // useEffect(() => {
-  //   dispatch(getAllProduct());
-  // }, []);
-  // console.log(products);
   return (
     <div className="container mx-auto px-4 py-40">
       <div className="text-center space-y-6">
         <h1 className="text-4xl font-bold tracking-tight lg:text-6xl">
           Welcome to Fakhr
         </h1>
-        {/* <div className="flex gap-4 justify-center">
-          <Button
-            onClick={() => {
-              dispatch(increment());
-            }}
-          >
-            {' '}
-            +{' '}
-          </Button>
-          <Button
-            onClick={() => {
-              dispatch(incrementByNum(5));
-            }}
-          >
-            {' '}
-            +++{' '}
-          </Button>
-          <Button
-            onClick={() => {
-              dispatch(decrement());
-            }}
-          >
-            {' '}
-            -{' '}
-          </Button>
-        </div> */}
 
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
           Discover the latest technology, fashion, and lifestyle products.

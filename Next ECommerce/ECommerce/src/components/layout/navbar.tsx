@@ -20,8 +20,7 @@ export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { cartCount, cartLoading } = useContext(CartContext);
 
-  const { count } = useSelector((state: any) => state.counter);
-  console.log(count);
+
 
   const navItems = [
     { href: '/products', label: 'Products' },

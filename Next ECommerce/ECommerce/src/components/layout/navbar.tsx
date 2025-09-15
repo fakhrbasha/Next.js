@@ -2,7 +2,15 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ShoppingCart, Search, User, Menu, X, Loader2 } from 'lucide-react';
+import {
+  ShoppingCart,
+  Search,
+  User,
+  Menu,
+  X,
+  Loader2,
+  LogOut,
+} from 'lucide-react';
 import { Button } from '@/components';
 import {
   NavigationMenu,
@@ -11,16 +19,17 @@ import {
   NavigationMenuList,
 } from '@/components';
 import { cn } from '@/lib/utils';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { CartContext } from '@/contexts/CartContext';
 import { useSelector } from 'react-redux';
+import { getSession, signOut, useSession } from 'next-auth/react';
 
 export function Navbar() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { cartCount, cartLoading } = useContext(CartContext);
 
-
+  const { data, status } = useSession();
 
   const navItems = [
     { href: '/products', label: 'Products' },
@@ -80,26 +89,44 @@ export function Navbar() {
             </Button>
 
             {/* User Account */}
-            <Button variant="ghost" size="icon">
-              <User className="h-5 w-5" />
-              <span className="sr-only">Account</span>
-            </Button>
+            {status == 'loading' ? (
+              'Loading..'
+            ) : status == 'authenticated' ? (
+              <>
+                <Button variant="ghost" size="icon">
+                  <User className="h-5 w-5" />
+                  <span className="sr-only">Account</span>
+                </Button>
 
-            {/* Shopping Cart */}
-            <Link href={'/cart'}>
-              <Button variant="ghost" size="icon" className="relative">
-                <ShoppingCart className="h-5 w-5" />
-                <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-xs text-primary-foreground flex items-center justify-center">
-                  {cartLoading ? (
-                    <Loader2 className="animate-spin" />
-                  ) : (
-                    cartCount
-                  )}
-                </span>
-                <span className="sr-only">Shopping cart</span>
-              </Button>
-            </Link>
-
+                {/* Shopping Cart */}
+                <Link href={'/cart'}>
+                  <Button variant="ghost" size="icon" className="relative">
+                    <ShoppingCart className="h-5 w-5" />
+                    <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-xs text-primary-foreground flex items-center justify-center">
+                      {cartLoading ? (
+                        <Loader2 className="animate-spin" />
+                      ) : (
+                        cartCount
+                      )}
+                    </span>
+                    <span className="sr-only">Shopping cart</span>
+                  </Button>
+                </Link>
+                <p>{data.user.name}</p>
+                <Button
+                  onClick={() => {
+                    signOut();
+                  }}
+                  variant="ghost"
+                  size="icon"
+                >
+                  <LogOut className="h-5 w-5" />
+                  <span className="sr-only">Logout</span>
+                </Button>
+              </>
+            ) : (
+              <Link href={'/auth/login'}>Login</Link>
+            )}
             {/* Mobile Menu */}
             <Button
               variant="ghost"

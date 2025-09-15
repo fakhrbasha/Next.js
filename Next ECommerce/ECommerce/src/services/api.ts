@@ -80,8 +80,18 @@ class ApiServices {
         }).then(res => res.json())
     }
 
-    async getAllBrands():Promise<BrandsResponse>{
-        return await fetch(this.#baseURL + "/api/v1/brands").then(res =>res.json())
+    async getAllBrands(): Promise<BrandsResponse> {
+        return await fetch(this.#baseURL + "/api/v1/brands").then(res => res.json())
+    }
+
+    async login(email: string, password: string) {
+        return await fetch(this.#baseURL + "/api/v1/auth/signin", {
+            body: JSON.stringify({
+                email, password
+            }),
+            headers: this.#getHeader(),
+            method: 'post'
+        }).then(res => res.json())
     }
 }
 // first take instance of the class

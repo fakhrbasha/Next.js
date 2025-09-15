@@ -1,17 +1,19 @@
 'use client';
 import { Button } from '@/components/ui/button';
-import {
-  decrement,
-  increment,
-  incrementByNum,
-} from '@/redux/slices/counterSlice';
-import { getAllProduct } from '@/redux/slices/productSlice';
-import { AppDispatch, RootState } from '@/redux/store';
+
 import Link from 'next/link';
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 
 export default function Home() {
+  useEffect(() => {
+    async function getUser() {
+      const response = await fetch('http://localhost:3000/api/users').then(
+        (res) => res.json()
+      );
+      console.log(response);
+    }
+    getUser();
+  }, []);
   return (
     <div className="container mx-auto px-4 py-40">
       <div className="text-center space-y-6">

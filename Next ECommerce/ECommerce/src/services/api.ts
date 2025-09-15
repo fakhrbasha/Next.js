@@ -1,5 +1,5 @@
 import { AddToCartResponse, GetUserCartResponse } from "@/interfaces";
-import { ProductsResponse, SingleProductResponse } from "@/types";
+import { BrandsResponse, ProductsResponse, SingleProductResponse } from "@/types";
 class ApiServices {
     #baseURL = 'https://ecommerce.routemisr.com';
     async getAllProducts(): Promise<ProductsResponse> {
@@ -63,6 +63,35 @@ class ApiServices {
             method: 'DELETE',
             headers: this.#getHeader(),
         }).then((res) => res.json());
+    }
+
+    async checkout(cartId: string) {
+        return await fetch(this.#baseURL + "/api/v1/orders/checkout-session/" + cartId + "?url=http://localhost:3000", {
+            body: JSON.stringify({
+                "shippingAddress": {
+                    "details": "details",
+                    "phone": "01010700999",
+                    "city": "Cairo"
+                }
+            }
+            ),
+            headers: this.#getHeader(),
+            method: 'post'
+        }).then(res => res.json())
+    }
+
+    async getAllBrands(): Promise<BrandsResponse> {
+        return await fetch(this.#baseURL + "/api/v1/brands").then(res => res.json())
+    }
+
+    async login(email: string, password: string) {
+        return await fetch(this.#baseURL + "/api/v1/auth/signin", {
+            body: JSON.stringify({
+                email, password
+            }),
+            headers: this.#getHeader(),
+            method: 'post'
+        }).then(res => res.json())
     }
 }
 // first take instance of the class
